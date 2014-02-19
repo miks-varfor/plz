@@ -1,0 +1,212 @@
+<?php
+function detag($str) {
+  return str_replace(array('<', '>'), array('&lt;', '&gt;'), $str);
+}
+?>
+<h1><?= htmlspecialchars($event['name']) ?></h1>
+<h2>Ilmoittautuneet</h2>
+<?php
+$totals = array();
+foreach($fields as $field) {
+	if ($field['type'] == 'radio' || $field['type'] == 'checkbox') {
+		$totals[$field['id']] = array();
+	}
+}
+?>
+
+<div id="list_participants_admin">
+
+<? if(!empty($fields)): ?>
+	<strong>Lisätietokenttien selitykset:</strong><br />
+	<ol>
+	<? foreach($fields as $field): ?>
+	   <li><?= htmlspecialchars($field['name']) ?></li>
+	<? endforeach ?>
+	</ol>
+<? endif ?>
+
+<table id="registrations">
+	<tr>
+		<th>Nimi</th>
+		<th>Email</th>
+		<th>Puhelin</th>
+	<? if(!empty($fields)): ?>
+		<th>Lisätietokentät</th>
+	<? endif ?>		
+	<? if ($event['price']): ?>
+		<th>Maksettu</th>
+	<? endif; ?>
+		<th></th>
+	</tr>
+	<? $mails = Array(); 
+	   $non_queue_mails = array();
+	   $unpaid_mails = array();
+	?>
+	<? 
+		$i = 1; 
+		$queue = false;
+	?>
+	<? foreach ($registrations as $registrationData) { ?>
+		<? $registration = $registrationData['Registration']; ?>
+		
+		<?php if(!empty($event['max_participants']) &&
+						$i >= $event['max_participants'] + 1 && !$queue): ?>
+				 </table>
+				 <h3>Jonossa</h3>
+				 <table id="registrations">
+					<tr>
+						<th>Nimi</th>
+						<th>Email</th>
+						<th>Puhelin</th>
+					<? if(!empty($fields)): ?>
+						<th>Lisätietokentät</th>
+					<? endif ?>		
+					<? if ($event['price']): ?>
+						<th>Maksettu</th>
+					<? endif; ?>
+						<th></th>
+					</tr>
+		<?php $queue = true; ?>
+		<?php endif; ?>
+		
+	<tr>
+		<td>
+		<?php
+		if(!isset($registration['user_id']))
+		  echo detag($registration['name']);
+		else {
+		  echo  $html->link(detag($registration['name']), '/users/edit/'.$registration['user_id'], array(), false, false); 
+		}
+		?>
+		</td>
+		<td class="email_address">
+		<?php
+		//echo  h($registration['email']);
+		echo '<a href="mailto: '.h($registration['email']).
+		     '"><img src="/img/icons/email.png"" alt="'.h($registration['email']).'" title="'.h($registration['email']).'" /></a>';
+		$mails[] = $registration['email'];
+		if(!$queue)
+			$non_queue_mails[] = $registration['email'];
+		
+                ?>
+		<td><?= h($registration['phone']); ?></td>
+	<? if(!empty($fields)) { ?>
+		<td>
+			<ol>
+			<? foreach($registrationData['CustomFieldAnswer'] as $field) { ?>
+				<li>
+<?php
+				echo nl2br(h($field['value']));
+				if (isset($totals[$field['custom_field_id']])) {
+					$set_fields = explode(';', $field['value']);
+					foreach ($set_fields as $field_name) {
+						if (!isset($totals[$field['custom_field_id']][$field_name])){
+							$totals[$field['custom_field_id']][$field_name] = 0;
+						}
+						if(!$queue)
+							// Ei lasketa jonossa olevia
+							$totals[$field['custom_field_id']][$field_name]++;
+					}
+				}
+?>
+	</li>
+			<? } ?>
+			</ol>
+		</td>
+	<? } ?>
+	<? if($event['price']):?>		
+		<td><?= $format->date($registration['paid']); ?></td>
+	<? endif; ?>
+		<td>
+			<?= $formy->buttonTo('Poista', '/registrations/cancelAny/'.$registration['id']); ?><br />
+			<? if ($event['price']): ?>
+				<? if(!$registration['paid']): ?>
+					<?= $formy->buttonTo('Maksettu', '/registrations/payEvent/'.$registration['id']); ?>
+					<? if(!$queue): ?>
+						<? $unpaid_mails[] = $registration['email']; ?>
+					<? endif; ?>
+				<? endif; ?>
+			<? endif; ?>
+		</td>
+	</tr>
+	<? $i++; ?>
+	<? } ?>
+</table>
+
+<p>
+<?php 
+echo "<a href=\"mailto: ";
+$str = "";
+$str_nq = "";
+$str_unpaid = "";
+$mails = array_unique($mails);
+$non_queue_mails = array_unique($non_queue_mails);
+$unpaid_mails = array_unique($unpaid_mails);
+
+foreach($non_queue_mails as $mail) 
+	$str_nq = $str_nq . $mail . ", ";
+echo substr($str_nq,0,-2);
+echo "\"> Sähköpostia ilmoittautuneille (ei jono) </a>";
+
+?>
+<span style="margin-left: 30px">
+<?php
+echo "<a href=\"mailto: ";
+foreach($mails as $mail) 
+	$str = $str . $mail . ", ";
+echo substr($str,0,-2);
+echo "\"> Sähköpostia kaikille </a>";
+?>
+</span>
+
+</p>
+
+<?php
+echo "<p>Ilmoittautuneiden sähköpostiosoitteet (ei jono): <input style=\"margin-top: 2px\" type=\"text\" value=\"" . substr($str_nq,0,-2) . "\" size=\"80\"></p>";
+
+echo "<p>Kaikki sähköpostiosoitteet: <input type=\"text\" style=\"margin-top: 2px\" value=\"" . substr($str,0,-2) . "\" size=\"80\"></p>";
+
+if($event['price']){
+	echo "<a href=\"mailto: ";
+	foreach($unpaid_mails as $mail) 
+		$str_unpaid = $str_unpaid . $mail . ", ";
+	echo substr($str_unpaid,0,-2);
+	echo "\">Sähköpostia maksamattomille (ei jono)</a>";
+
+	echo "<p>Maksamattomien sähköpostiosoitteet: <input type=\"text\" style=\"margin-top: 2px\" value=\"" . substr($str_unpaid,0,-2) . "\" size=\"80\"></p>";
+}
+
+echo '<div id="custom_field_totals">';
+
+if (!empty($fields) && !empty($totals)) {
+	echo "<h2>Yhteenveto lisätietokentistä (ei jonossa olevat)</h2>\n";
+	foreach ($fields as $name => $field) {
+		echo "<ul>\n";
+		if (isset($totals[$field['id']])) {
+			echo '<li>' . htmlspecialchars($field['name']) . "\n";
+			echo "<ul>\n";
+			foreach ($totals[$field['id']]
+					 as $selection_name => $selection_count) {
+				if (empty($selection_name)) {
+					echo '<li>(tyhjä)';
+				}
+				else {
+					echo '<li>' . htmlspecialchars($selection_name);
+				}
+				echo ': ' . $selection_count . "</li>\n";
+			}
+			echo "</ul>\n";
+			echo "</li>\n";
+		}
+		echo "</ul>\n\n";
+	}
+}
+?>
+
+</div>
+
+</div>
+
+<p><?= $html->link('Takaisin ilmoittautuneisiin', 'listParticipants/'.$event['id']); ?></p>
+<p><?= $html->link('Takaisin tapahtumaan', '/calendar_events/view/'.$event['id']); ?></p>
+

@@ -1,0 +1,14 @@
+<?php
+/**
+* Social media buttons snippet.
+*/
+?>
+
+<div id="social"> 
+	<a href="http://kalu.domain.local">
+			<img alt="iCalendar-syöte" src="/img/icons/ics.gif" title="Tapahtumat iCalendar-syötteenä" />
+	</a>
+	<a href="/calendar_events/rss"> 
+		<img alt="RSS" src="/img/icons/feed.png" /> 
+	</a> 
+</div>

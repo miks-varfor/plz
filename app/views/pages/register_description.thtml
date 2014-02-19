@@ -1,0 +1,47 @@
+<?php $this->pageTitle = 'Rekisteriseloste'; ?>
+
+<h2>1. Rekisterin pitäjä</h2>
+<p>MIKS<br />
+Leppäsuonkatu 11<br />
+00100 Helsinki</p>
+ 
+<h2>2. Rekisterin nimi</h2>
+<p>MIKS:n jäsenrekisteri</p>
+ 
+<h2>3. Yhteyshenkilö</h2>
+<p>Yhdistyksen vastaava<br />
+vastaava@domain.local</p>
+ 
+<h2>4. Rekisterin käyttötarkoitus</h2>
+<p>Jäsenrekisterin tietoja voidaan käyttää yhteydenpitoon jäsenten suuntaan, 
+jäsenmaksujen tarkkailuun ja jäsenyyden tarkastamiseen.</p>
+ 
+<h2>5. Rekisterin tietosisältö</h2>
+<p>Täydellinen nimi<br />
+Kotikunta<br />
+Sähköpostiosoite<br />
+Puhelinnumero<br />
+Jäsenmaksuun ja jäsenyyteen liittyvät tiedot</p>
+ 
+<h2>6. Rekisterin tietolähteet</h2>
+<p>Jäsenhakemuksissa kerätyt tiedot.</p>
+ 
+<h2>7. Tietojen luovutus</h2>
+<p>Tietoja voidaan käyttää yhdistyksen toiminnassa yhdistyksen hallituksen 
+ja yhdistyksen sääntöjen määräämällä tavalla.</p>
+<p>Yhdistyslain 11 § 2 momentin mukaisesti kaikilla yhdistyksen jäsenillä 
+on oikeus tutustua tietoihin kaikkien jäsenten nimestä, kotipaikasta ja jäsenyydestä.</p>
+<p>Tietoja ei luovuteta yhdistyksen ulkopuolelle.</p>
+ 
+<h2>8. Rekisterin suojauksen periaatteet</h2>
+<p>Jäsenrekisteri sijaitsee yhdistyksen palvelimella tietokannassa. Palvelin on suojattu 
+ulkopuoliselta käytöltä ja jäsentietojen käyttöä valvotaan. Pääsy rekisteriin on yhdistyksen
+ATK-järjestelmien ylläpitäjillä sekä jäsenvirkailijoilla. Rekisterinkäyttäjillä on henkilökohtaiset
+käyttäjätunnukset ja salasanat.</p>
+ 
+<h2>9. Tietojen tarkastusoikeus</h2>
+<p>Henkilötietolain 26 § mukaan jäsenellä on oikeus tarkastaa itseään koskevat 
+rekisteritiedot ja saada niistä pyydettäessä kopiot. Tarkastaminen on 
+maksutonta kerran vuodessa.</p>
+
+<p><?php echo $html->link('Takaisin','javascript:history.go(-1)'); ?></p>

@@ -1,0 +1,65 @@
+<?php
+function detag($str) {
+  return str_replace(array('<', '>'), array('&lt;', '&gt;'), $str);
+}
+?>
+<h1><?= htmlspecialchars($event['name']) ?></h1>
+<h2>Ilmoittautuneet</h2>
+
+	<?php $avec = $event['avec']; 	?>
+	<table id="registrations">
+		<tr>
+			<th>Nimi</th>
+		<? if($avec): ?>
+			<th>Avec</th>
+		<? endif; ?>
+		</tr>
+		<? $i = 1; 
+		$queue = false;
+		
+		?>
+		<? foreach ($normal_registrations as $registrationData): ?>
+		<?php if(!empty($event['max_participants']) &&
+						$i >= $event['max_participants'] + 1 && !$queue): ?>
+				 </table>
+				 <h3>Jonossa</h3>
+				 <table id="registrations">
+		<?php $queue = true; ?>
+		<?php endif; ?>
+		
+			<tr>
+			<td>
+			<?= $i . ". " .detag($registrationData['user']['name']) ?>
+			<?php 
+				if(isset($registrationData['userdata']['member_number'])) {
+					echo " (&#9794; ".$registrationData['userdata']['member_number'].")";
+				}
+			?>
+			</td>
+			<?php if($avec) {
+			 	if($registrationData['avec']['avecname'] != "") {
+				  echo "<td>" .detag($registrationData['avec']['avecname']) . "</td>";
+			 		$i++;
+				} else {
+					echo "<td> - </td>";
+				}
+				
+			} ?>
+			</tr>
+			<?php $i++; ?>
+		<? endforeach; ?>
+	</table>
+	<?php
+	
+	echo 'Ilmoittautuneita: '.($i-1);
+	if(isset($event['max_participants'])){
+		echo ' / '.$event['max_participants'].' ';
+	}
+	
+	?>
+<?  if($isAdmin): ?>
+	<p><?= $html->link('Lisätiedot ilmoittautuneista', 'listParticipantsAdmin/'.$event['id']); ?></p>
+<?     endif; ?>
+
+<p><?= $html->link('Takaisin tapahtumaan', '/calendar_events/view/'.$event['id']); ?></p>
+

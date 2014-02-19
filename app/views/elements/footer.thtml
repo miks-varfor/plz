@@ -1,0 +1,26 @@
+<div id='footer'>
+	
+	<div>
+	<?php if(isset($cakeDebug)) echo $cakeDebug; ?>
+	</div>
+	
+	<div class='section'>
+	<h1>Posti</h1>
+	MIKS<br />
+	Christina Regina<br />
+	Leppäsuonkatu 11<br />
+	00100 Helsinki
+	</div>
+	<div class='section'>
+	<h1>Sähköposti</h1>
+	hallitus ät domain.local
+	<h1>Puheenjohtaja</h1>
+	pj ät domain.local
+	</div>
+
+	<div class='section'>
+
+	<h1>Tilinumero</h1>
+	FIXX XXXX XXXX XXXX
+	</div>
+</div>

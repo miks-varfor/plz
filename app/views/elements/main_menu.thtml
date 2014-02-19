@@ -1,0 +1,36 @@
+<?php
+/**
+* Snippet containing the main navigation menu shared between 
+* main TKO-äly site and members.
+*/
+?>
+
+<div id='menu'> 
+	<ul> 
+	<li class="border"><a href='http://domain.local/'>etusivu</a></li> 
+	<li class="border"><a href='/calendar_events'>kalenteri</a></li>
+	<?php
+	if(isset($calendarsub) && $calendarsub == true && isset($submenu)){
+		echo '<li class="li_submenu">'.$submenu.'</li>';
+	}
+	?>
+	<li class="border"><a href="<?php 
+	if ($currentUser == null) {
+		echo('/users/add">jäseneksi');
+	} else {
+		echo('/users/edit">jäsentiedot');
+	}?>
+	</a></li> 
+	<?php
+	if(isset($calendarsub) && $calendarsub == false && isset($submenu)){
+		echo '<li class="li_submenu">'.$submenu.'</li>';
+	}
+	?>
+	</ul>
+	<?php
+	if(!isset($submenu) || strlen($submenu) == 0 || (isset($calendarsub) && $calendarsub)){
+		echo "<div class='overlap'></div>";
+	}
+	?>
+</div>
+

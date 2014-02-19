@@ -1,0 +1,24 @@
+<?php
+/**
+* Login form snippet
+*/
+?>
+
+<div id="login">
+<?php
+	if ($currentUser != null) {
+		printf("<p>Kirjautuneena: %s</p>\n", $currentUser['screen_name']);
+		printf("<p>%s</p>\n", $html->link('Kirjaudu ulos', '/authentications/logout'));
+	} else {
+		echo $form->create('Authentication', array('type' => 'post', 'action' => 'login'))  . "\n";
+		echo $form->hidden('redirect', aa('value', $urli));
+		echo $form->label('username', 'Tunnus:') . "\n";
+		echo $form->text('username') . ' ';
+		echo $form->label('password', 'Salasana:') . "\n";
+		echo $form->password('password') . ' ';
+		echo $form->submit('Kirjaudu', array('div' => false, 'class' => 'form-submit')) . "\n"; 
+		echo "</form><br />\n";
+		echo $html->link('Unohdin salasanani', '/forgotPassword') . "\n";
+	}
+?>
+</div>

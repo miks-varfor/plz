@@ -1,0 +1,7 @@
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+   RewriteEngine  on
+   RewriteRule    ^$ /Absolut/path/to/app/webroot/    [L]
+   RewriteRule    (.*) /Absolute/path/to/app/webroot/$1 [L]
+</IfModule>

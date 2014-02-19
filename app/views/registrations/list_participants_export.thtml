@@ -1,0 +1,57 @@
+<?php
+// Yksinkertainen tapahtuman osallistujien exporttaus
+// Wampien plassaussoftaa varten.
+// -- Logima
+
+function detag($str) {
+  return str_replace(array('<', '>'), array('&lt;', '&gt;'), $str);
+}
+?>
+<h1><?= htmlspecialchars($event['name']) ?></h1>
+<h2>Ilmoittautuneet</h2>
+<?php
+$totals = array();
+foreach($fields as $field) {
+	if ($field['type'] == 'radio' || $field['type'] == 'checkbox') {
+		$totals[$field['id']] = array();
+	}
+}
+?>
+
+<div id="list_participants_admin">
+
+<? if(!empty($fields)): ?>
+	<strong>Lisätietokenttien selitykset:</strong><br />
+	<ol>
+	<? foreach($fields as $field): ?>
+	   <li><?= htmlspecialchars($field['name']) ?></li>
+	<? endforeach ?>
+	</ol><br />
+<? endif ?>
+
+
+<textarea rows="10" cols="60">
+<?php
+$i = 1;
+foreach($registrations as $registrationData) {
+	echo $registrationData["Registration"]["name"] . "|";
+	echo $registrationData["Avec"]["name"] . "|";
+	foreach($registrationData["CustomFieldAnswer"] as $customData) {
+		echo $customData["value"] . "|";
+	}
+	echo "\r\n";
+	if($i >= $event['max_participants']) break;
+	$i++;
+}
+?>
+</textarea>
+
+
+
+
+</div>
+
+<p><?= $html->link('Takaisin admin-näkymään', 'listParticipantsAdmin/'.$event['id']); ?></p>
+<p><?= $html->link('Takaisin ilmoittautuneisiin', 'listParticipants/'.$event['id']); ?></p>
+<p><?= $html->link('Takaisin tapahtumaan', '/calendar_events/view/'.$event['id']); ?></p>
+
