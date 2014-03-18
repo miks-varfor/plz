@@ -82,7 +82,7 @@ foreach($fields as $field) {
 		<td class="email_address">
 		<?php
 		//echo  h($registration['email']);
-		echo '<a href="mailto: '.h($registration['email']).
+		echo '<a href="mailto:'.h($registration['email']).
 		     '"><img src="/img/icons/email.png"" alt="'.h($registration['email']).'" title="'.h($registration['email']).'" /></a>';
 		$mails[] = $registration['email'];
 		if(!$queue)
@@ -135,7 +135,7 @@ foreach($fields as $field) {
 
 <p>
 <?php 
-echo "<a href=\"mailto: ";
+echo "<a href=\"mailto:";
 $str = "";
 $str_nq = "";
 $str_unpaid = "";
@@ -151,7 +151,7 @@ echo "\"> Sähköpostia ilmoittautuneille (ei jono) </a>";
 ?>
 <span style="margin-left: 30px">
 <?php
-echo "<a href=\"mailto: ";
+echo "<a href=\"mailto:";
 foreach($mails as $mail) 
 	$str = $str . $mail . ", ";
 echo substr($str,0,-2);
@@ -167,7 +167,7 @@ echo "<p>Ilmoittautuneiden sähköpostiosoitteet (ei jono): <input style=\"margi
 echo "<p>Kaikki sähköpostiosoitteet: <input type=\"text\" style=\"margin-top: 2px\" value=\"" . substr($str,0,-2) . "\" size=\"80\"></p>";
 
 if($event['price']){
-	echo "<a href=\"mailto: ";
+	echo "<a href=\"mailto:";
 	foreach($unpaid_mails as $mail) 
 		$str_unpaid = $str_unpaid . $mail . ", ";
 	echo substr($str_unpaid,0,-2);
